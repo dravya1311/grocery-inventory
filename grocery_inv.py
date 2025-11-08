@@ -47,8 +47,8 @@ def load_data(file_path, current_date):
         df[col] = pd.to_datetime(df[col], errors='coerce', dayfirst=False)
 
     # 5. Calculate Days Until Expiration
-    # Use the passed argument (a simple date object)
-    df['Days_to_Expire'] = (df['Expiration_Date'] - pd.to_datetime(current_date)).dt.days
+    # FIX: Explicitly convert the simple date object to a Pandas Timestamp for robust subtraction
+    df['Days_to_Expire'] = (df['Expiration_Date'] - pd.Timestamp(current_date)).dt.days
     
     # Fill any missing Category values for safe grouping
     df['Catagory'] = df['Catagory'].fillna('Unknown')
@@ -240,7 +240,8 @@ if not df.empty and calculate_kpis(df) is not None:
         'Inventory_Value',
         'Product_Margin'
     ]
-    st.dataframe(expiring_soon_data[display_cols].style.format({'Product_Margin': '{:.1%}'}).background_gradient(cmap='Reds', subset=['Days_to_Expire']), use_container_width=True)
+    # FIX: Removed .background_gradient() which requires matplotlib
+    st.dataframe(expiring_soon_data[display_cols].style.format({'Product_Margin': '{:.1%}'}), use_container_width=True)
 
 
 else:
