@@ -1,3 +1,5 @@
+pip install streamlit pandas plotly-express
+streamlit run supply_chain_kpi_dashboard.py
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -205,4 +207,5 @@ if not df.empty:
 
 else:
     # This message appears if the DataFrame is empty (e.g., file not found or corrupted)
+
     st.warning("Please ensure the 'Grocery_Inventory.csv' file is accessible and properly formatted to run the dashboard.")
