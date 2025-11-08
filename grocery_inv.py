@@ -1,14 +1,14 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-# FIX: Importing the entire module to ensure the class is correctly scoped
-import datetime 
+# FIX: Importing the specific 'date' class for reliable date retrieval
+from datetime import date 
 
 # --- Configuration ---
 st.set_page_config(layout="wide", page_title="Supply Chain Inventory KPI Dashboard")
 
-# FIX: Calculate the current date outside of the cached function using the fully qualified name
-TODAY = datetime.datetime.now().normalize() 
+# FIX: Calculate the current date using the simplest method possible (date.today())
+TODAY = date.today() 
 
 # --- Data Loading and Preprocessing ---
 @st.cache_data
@@ -49,7 +49,7 @@ def load_data(file_path, current_date): # Now accepts current_date as an argumen
         df[col] = pd.to_datetime(df[col], errors='coerce', dayfirst=False)
 
     # 5. Calculate Days Until Expiration
-    # Use the passed argument instead of calling datetime.now() inside the cached function
+    # Use the passed argument (a simple date object)
     df['Days_to_Expire'] = (df['Expiration_Date'] - current_date).dt.days
     
     # Fill any missing Category values for safe grouping
